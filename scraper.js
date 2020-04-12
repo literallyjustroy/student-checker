@@ -36,10 +36,8 @@ async function lookupStudent(page, firstName, lastName) {
     const txt = await result.getProperty('textContent');
     const rawTxt = await txt.jsonValue();
 
-    if (rawTxt == 'Directory search results - 0 Records Found') {
-        return false;
-    }
-    return true;
+    return rawTxt !== 'Directory search results - 0 Records Found';
+
 }
 
 async function scrapeStuff(url, user, pass) {
@@ -79,11 +77,11 @@ async function scrapeStuff(url, user, pass) {
 }
 
 const args = process.argv.slice(2);
-if (args.length == 2) { // Get credentials from command line
+if (args.length === 2) { // Get credentials from command line
     const userName = args[0];
     const password = args[1];
     scrapeStuff(studentDirectory, userName, password);
-} else if (args.length == 0) { // Get credentials from credentials.txt
+} else if (args.length === 0) { // Get credentials from credentials.txt
     const creds = getCreds(credentialsFileName);
     if (creds.length >= 2) {
         const userName = creds[0];
@@ -93,5 +91,5 @@ if (args.length == 2) { // Get credentials from command line
         console.log('Failure: Either provide NKU user and password as arguments, or as the first and second line in a credentials.txt file');
     }
 } else {
-    console.log('Failure: Only 1 or 2 arguments supported');
+    console.log('Failure: Only 0 or 2 arguments supported');
 }
